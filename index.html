@@ -7,6 +7,7 @@
     <style>
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -17,9 +18,28 @@
         h1 {
             color: #333;
         }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <h1>Hello, World!</h1>
+    <button id="accessButton">Go to Protected Page</button>
+
+    <script>
+        document.getElementById('accessButton').addEventListener('click', function() {
+            const password = prompt("Please enter the password:");
+
+            // 簡單的密碼驗證
+            if (password === "your_password") {
+                window.location.href = "protected.html"; // 替換為您的目標頁面
+            } else {
+                alert("Incorrect password. Please try again.");
+            }
+        });
+    </script>
 </body>
 </html>
