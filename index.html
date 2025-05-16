@@ -3,41 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        h1 {
-            color: #333;
-        }
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-    </style>
+    <title>Protected Page</title>
 </head>
 <body>
-    <h1>Hello, World!</h1>
-    <button id="accessButton">Go to Protected Page</button>
+    <h1>Welcome to the Protected Page</h1>
+    <input type="password" id="passwordInput" placeholder="Enter password">
+    <button id="accessButton">Access</button>
+    <div id="message"></div>
 
     <script>
-        document.getElementById('accessButton').addEventListener('click', function() {
-            const password = prompt("Please enter the password:");
+        const correctHash = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'; // 將此處替換為密碼的哈希值
 
-            // 簡單的密碼驗證
-            if (password === "your_password") {
-                window.location.href = "protected.html"; // 替換為您的目標頁面
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        document.getElementById('accessButton').addEventListener('click', async () => {
+            const password = document.getElementById('passwordInput').value;
+            const hashedPassword = await hashPassword(password);
+            
+            if (hashedPassword === correctHash) {
+                document.getElementById('message').innerText = "Access granted!";
+                // 這裡可以跳轉到保護的內容
             } else {
-                alert("Incorrect password. Please try again.");
+                document.getElementById('message').innerText = "Access denied!";
             }
         });
     </script>
